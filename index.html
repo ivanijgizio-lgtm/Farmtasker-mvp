@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmTasker - Агрегатор фермерских заданий и свежих продуктов</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .slogan {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 300;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Search Section */
+        .search-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 25px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.8);
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.1), inset -4px -4px 8px rgba(255,255,255,0.9);
+            margin-bottom: 20px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            box-shadow: 4px 4px 12px rgba(0,0,0,0.15), -4px -4px 12px rgba(255,255,255,1);
+            transform: scale(1.02);
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.7);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -3px -3px 6px rgba(255,255,255,0.8);
+            transition: all 0.3s;
+            color: #4CAF50;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            box-shadow: 4px 4px 12px rgba(76,175,80,0.4), inset -4px -4px 12px rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .search-btn {
+            padding: 18px 50px;
+            font-size: 1.2em;
+            font-weight: 600;
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 6px 6px 20px rgba(76,175,80,0.4), -6px -6px 20px rgba(255,255,255,0.6);
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 8px 8px 25px rgba(76,175,80,0.5), -8px -8px 25px rgba(255,255,255,0.8);
+        }
+
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* Farms Preview */
+        .farms-preview {
+            text-align: center;
+        }
+
+        .farms-title {
+            font-size: 2em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .farm-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+
+        .farm-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .farm-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #8BC34A, #4CAF50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+        }
+
+        .farm-info h3 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .farm-region {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .farm-price {
+            font-weight: 600;
+            color: #4CAF50;
+            font-size: 1.2em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-filters {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .farm-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-seedling"></i> FarmTasker
+            </div>
+            <div class="slogan">
+                Свежие продукты с российских ферм. Закажите задание на выращивание или доставку прямо сейчас!
+            </div>
+        </header>
+
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Поиск продуктов: помидоры, молоко, мясо... или фермы по региону">
+                <div class="search-filters">
+                    <button class="filter-btn active"><i class="fas fa-leaf"></i> Органика</button>
+                    <button class="filter-btn"><i class="fas fa-truck"></i> Доставка</button>
+                    <button class="filter-btn"><i class="fas fa-tasks"></i> Задания</button>
+                </div>
+                <button class="search-btn">
+                    <i class="fas fa-search"></i> Найти фермы
+                </button>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-search-location"></i>
+                </div>
+                <h3 class="feature-title">Поиск по регионам</h3>
+                <p>Фермы из всех уголков России: от Алтая до Подмосковья.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="feature-title">Свежая доставка</h3>
+                <p>Сбор урожая под заказ, доставка за 2-3 дня.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3 class="feature-title">Задания фермерам</h3>
+                <p>Закажите выращивание именно того, что нужно вам.</p>
+            </div>
+        </section>
+
+        <section class="farms-preview">
+            <h2 class="farms-title">Популярные фермы прямо сейчас</h2>
+            <div class="farm-card">
+                <div class="farm-img">
+                    <i class="fas fa-tractor"></i>
+                </div>
+                <div class="farm-info">
+                    <h3>Волжская Ферма (как funnyferma.ru)</h3>
+                    <div class="farm-region"><i class="fas fa-map-marker-alt"></i> Волгоградская обл.</div>
+                    <div class="farm-price">Молоко 1л - 120₽ | Доставка пн/ср/пт</div>
+                </div>
+            </div>
+            <div class="farm-card">
+                <div class="farm-img">
+                    <i class="fas fa-seedling"></i>
+                </div>
+                <div class="farm-info">
+                    <h3>Алтайские Овощи</h3>
+                    <div class="farm-region"><i class="fas fa-map-marker-alt"></i> Алтайский край</div>
+                    <div class="farm-price">Помидоры 1кг - 180₽ | Задание на урожай</div>
+                </div>
+            </div>
+            <div class="farm-card">
+                <div class="farm-img">
+                    <i class="fas fa-cow"></i>
+                </div>
+                <div class="farm-info">
+                    <h3>Подмосковное Мясо</h3>
+                    <div class="farm-region"><i class="fas fa-map-marker-alt"></i> Московская обл.</div>
+                    <div class="farm-price">Говядина 1кг - 650₽ | Экспресс-доставка</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 FarmTasker. Свежие продукты от российских фермеров. <i class="fas fa-heart" style="color: #4CAF50;"></i></p>
+        </footer>
+    </div>
+
+    <script>
+        // Простая интерактивность
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        document.querySelector('.search-btn').addEventListener('click', () => {
+            const query = document.querySelector('.search-input').value;
+            if (query) {
+                alert(`Поиск по "${query}"... Найдено 15 ферм! (Демо)`);
+            }
+        });
+
+        document.querySelector('.search-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-btn').click();
+            }
+        });
+    </script>
+</body>
+</html>
